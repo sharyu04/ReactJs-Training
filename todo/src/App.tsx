@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import AddTodo from './components/AddTodo';
+import TodoList from './components/TodoList';
 
+export type todoType = {
+        task: string;
+        completed : boolean
+    }
+    
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    const [todoArr, setTodoArr] = useState<todoType[]>([
+        {
+            task: "Task1",
+            completed: false
+        },
+        {
+            task: "Task2",
+            completed: false
+        },
+        {
+            task: "Task3",
+            completed: true
+        }
+        ])
+
+ const handleCheck = (id: number) => {
+         const updateArray = {...todoArr}
+         updateArray[id].completed = !updateArray[id].completed
+         setTodoArr(updateArray)
+     }
+return (
+    <div>
+        <AddTodo />
+        <TodoList todoArr = {todoArr} handleCheck = {handleCheck} type = {"Scheduled"} />
+        <TodoList todoArr = {todoArr} handleCheck = {handleCheck} type = {"Completed"} />
     </div>
-  );
+);
 }
 
-export default App;
+export default App
