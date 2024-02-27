@@ -25,15 +25,24 @@ function App() {
         ])
 
  const handleCheck = (id: number) => {
-         const updateArray = {...todoArr}
+         const updateArray = [...todoArr]
          updateArray[id].completed = !updateArray[id].completed
          setTodoArr(updateArray)
      }
+ const removeTask = (idx:number)=>{
+    setTodoArr([
+        ...todoArr.slice(0,idx),
+        ...todoArr.slice(idx+1,todoArr.length)
+    ]);
+ }
+ const addTask = (taskName:string) => {
+    setTodoArr([...todoArr,{task: taskName, completed: false}])
+ }
 return (
     <div>
-        <AddTodo />
-        <TodoList todoArr = {todoArr} handleCheck = {handleCheck} type = {"Scheduled"} />
-        <TodoList todoArr = {todoArr} handleCheck = {handleCheck} type = {"Completed"} />
+        <AddTodo todoArr = {todoArr} addTask = {addTask}/>
+        <TodoList todoArr = {todoArr} handleCheck = {handleCheck} type = {"Scheduled"} removeTask = {removeTask}/>
+        <TodoList todoArr = {todoArr} handleCheck = {handleCheck} type = {"Completed"} removeTask = {removeTask}/>
     </div>
 );
 }
