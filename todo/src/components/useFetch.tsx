@@ -7,9 +7,8 @@ function useFetch(url: string) {
     const [loading, setLoading] = useState<Boolean>(false)
     const [error, setError] = useState<Error | null>(null)
 
-    useEffect( () => {
-        setLoading(true)
-        axios.get(url).then(res => {
+    const getDataFunc = async() =>{
+        await axios.get(url).then(res => {
             setLoading(false)
             console.log(res)
             setData(res.data)
@@ -17,6 +16,11 @@ function useFetch(url: string) {
             setLoading(false)
             setError(err)
         })
+    }
+
+    useEffect( () => {
+        setLoading(true)
+        getDataFunc()
     }, [url])
     return {data, loading, error}
 }
