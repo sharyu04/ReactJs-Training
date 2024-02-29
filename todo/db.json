@@ -1,0 +1,16 @@
+{
+"todo":[
+    {
+            "task": "Task1",
+            "completed": false
+    },
+    {
+            "task": "Task2",
+            "completed": false
+    },
+    {
+            "task": "Task3",
+            "completed": true
+    }
+]
+}

@@ -23,3 +23,4 @@ const TodoList = ({ todoArr, handleCheck, type, removeTask }: { todoArr: todoTyp
 }
 
 export default TodoList
+

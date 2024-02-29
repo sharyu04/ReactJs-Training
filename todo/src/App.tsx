@@ -1,29 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import AddTodo from './components/AddTodo';
 import TodoList from './components/TodoList';
+import useFetch from './components/useFetch';
 
 export type todoType = {
         task: string;
         completed : boolean
     }
-    
-function App() {
-    const [todoArr, setTodoArr] = useState<todoType[]>([
-        {
-            task: "Task1",
-            completed: false
-        },
-        {
-            task: "Task2",
-            completed: false
-        },
-        {
-            task: "Task3",
-            completed: true
-        }
-        ])
 
+function App() {
+    const {data,loading, error}: {data: todoType[], loading: Boolean, error: Error | null} = useFetch("http://localhost:8000/todo")
+    const [todoArr, setTodoArr] = useState<todoType[]>(data)
+useEffect(()=>{
+        console.log("Data: ",data)
+        console.log("Loading: ",loading)
+        console.log("error: ",error)
+    },[data,loading,error])
  const handleCheck = (id: number) => {
          const updateArray = [...todoArr]
          updateArray[id].completed = !updateArray[id].completed
