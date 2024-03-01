@@ -20,6 +20,7 @@ function App() {
   );
   useEffect(() => {
     if (error !== null) {
+        alert(error)
       console.log(error);
     } else {
       console.log("Data: ", data);
