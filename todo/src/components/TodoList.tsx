@@ -16,7 +16,6 @@ const TodoList = ({ todoArr, handleCheck, type, removeTask }: { todoArr: todoTyp
                     if(!todoTask.completed)
                         return <Todo task={todoTask.task} completed={todoTask.completed} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask}/>
                 }
-                // console.log(idx)
             })}
         </div>
     )
