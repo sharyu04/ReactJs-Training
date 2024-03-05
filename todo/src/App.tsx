@@ -16,7 +16,7 @@ export type todoType = {
 
 function App() {
     const [todoArr, setTodoArr] = useState<todoType[]>([]);
-    const {
+   const {
         data,
         loading,
         error,
