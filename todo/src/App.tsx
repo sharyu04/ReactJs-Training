@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -9,6 +10,7 @@ import useFetch from "./components/useFetch";
 
 export type todoType = {
     task: string;
+    dueDate: string;
     completed: boolean;
 };
 
@@ -39,8 +41,20 @@ function App() {
             ...todoArr.slice(idx + 1, todoArr.length),
         ]);
     };
-    const addTask = (taskName: string) => {
-        setTodoArr([...todoArr, { task: taskName, completed: false }]);
+    const addTask =  (taskName: string, dueDate: string) => {
+        const taskData = {
+            id: Math.floor(Math.random() * 100),
+            task: taskName,
+            dueDate: dueDate,
+            completed: false
+        }
+        const response = axios.post<unknown>("http://localhost:8000/todo", taskData)
+        response.then(response => {
+            console.log(response)
+            setTodoArr([...todoArr, { task: taskName, dueDate: dueDate, completed: false }]);
+        }).catch(err => {
+                alert(err)
+            })
     };
     return (
         <div>
@@ -54,9 +68,9 @@ function App() {
                             <Routes>
                                 <Route path="/" element={<Home todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
                                 <Route path="/addTodo" element={
-                                    <AddTodo todoArr={todoArr} addTask={addTask} />}
+                                    <AddTodo addTask={addTask} />}
                                 />
-                                <Route path="/todos/:id" element={<TodoRoute todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask}/>} />
+                                <Route path="/todos/:id" element={<TodoRoute todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
                             </Routes>
                         </BrowserRouter>
                     );

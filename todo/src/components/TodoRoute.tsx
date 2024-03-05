@@ -5,7 +5,7 @@ function TodoRoute({todoArr, handleCheck, removeTask}:{todoArr:todoType[], handl
  const params = useParams();
  const id = Number(params.id) 
  return(
-    <Todo task={todoArr[id].task} completed={todoArr[id].completed} handleCheck={handleCheck} idx={id} removeTask={removeTask}/>
+    <Todo task={todoArr[id].task} dueDate={todoArr[id].dueDate} completed={todoArr[id].completed} handleCheck={handleCheck} idx={id} removeTask={removeTask}/>
  )
     }
     export default TodoRoute

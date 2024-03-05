@@ -10,11 +10,11 @@ const TodoList = ({ todoArr, handleCheck, type, removeTask }: { todoArr: todoTyp
             {todoArr.map((todoTask,idx) => {
                 if(type === "Completed"){
                     if(todoTask.completed)
-                        return <Todo task={todoTask.task} completed={todoTask.completed} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask} />
+                        return <Todo task={todoTask.task} dueDate={todoTask.dueDate} completed={todoTask.completed} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask} />
                 }
                 else{
                     if(!todoTask.completed)
-                        return <Todo task={todoTask.task} completed={todoTask.completed} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask}/>
+                        return <Todo task={todoTask.task} dueDate={todoTask.dueDate} completed={todoTask.completed} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask}/>
                 }
             })}
         </div>

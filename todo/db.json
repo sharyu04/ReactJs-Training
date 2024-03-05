@@ -1,16 +1,28 @@
 {
-"todo":[
+  "todo": [
     {
-            "task": "Task1",
-            "completed": false
+      "id": 1,
+      "task": "Task1",
+      "dueDate": "2024-03-06",
+      "completed": false
     },
     {
-            "task": "Task2",
-            "completed": false
+      "id": 2,
+      "task": "Task2",
+      "dueDate": "2024-03-06",
+      "completed": false
     },
     {
-            "task": "Task3",
-            "completed": true
+      "id": 3,
+      "task": "Task3",
+      "dueDate": "2024-03-06",
+      "completed": true
+    },
+    {
+      "id": 34,
+      "task": "Task4",
+      "dueDate": "2024-03-06",
+      "completed": false
     }
-]
+  ]
 }
