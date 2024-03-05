@@ -8,7 +8,7 @@ const AddTodo = ({addTask}: { addTask: (taskName: string, dueDate: string) => vo
         if (str !== "" && dueDate !== "") {
             addTask(str, dueDate)
             setStr('')
-            setSuccess(true)
+           setSuccess(true)
             setTimeout(() => { setSuccess(false) }, 1000)
         }
     }

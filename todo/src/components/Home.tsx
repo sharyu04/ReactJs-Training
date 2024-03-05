@@ -1,7 +1,7 @@
 import { todoType } from "../App";
 import TodoList from "./TodoList";
 
-function Home({todoArr, handleCheck, removeTask}:{todoArr: todoType[], handleCheck:(id: number)=>void, removeTask: (id: number)=>void}) {
+function Home({todoArr, handleCheck, removeTask}:{todoArr: todoType[], handleCheck:(id: number, task: string, dueDate: string, status: Boolean)=>void, removeTask: (id: number)=>void}) {
 
           return (
             <>
