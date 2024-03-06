@@ -10,7 +10,7 @@
       "id": 3,
       "task": "Task 5",
       "dueDate": "2024-03-21",
-      "completed": true
+      "completed": false
     },
     {
       "id": 4,
@@ -20,8 +20,8 @@
     },
     {
       "id": 5,
-      "task": "Task test",
-      "dueDate": "2024-03-27",
+      "task": "New task",
+      "dueDate": "2024-03-20",
       "completed": false
     }
   ]

@@ -17,6 +17,7 @@ export type todoType = {
 
 function App() {
     const [todoArr, setTodoArr] = useState<todoType[]>([]);
+    
     const {
         data,
         loading,
@@ -24,6 +25,7 @@ function App() {
     }: { data: todoType[]; loading: Boolean; error: Error | null } = useFetch(
         "http://localhost:8000/todo"
     );
+    const [searchInp, setSearchInp] = useState<string>("")
     useEffect(() => {
         if (error !== null) {
             alert(error)
@@ -74,6 +76,10 @@ function App() {
             alert(err)
         })
     };
+    const onSearchChange = (e: any) => {
+        e.preventDefault()
+        setSearchInp(e.target.value)
+    }
     return (
         <div>
             {(() => {
@@ -82,9 +88,9 @@ function App() {
                 } else {
                     return (
                         <BrowserRouter>
-                            <Navbar />
+                            <Navbar searchInp={searchInp} onSearchChange={onSearchChange}/>
                             <Routes>
-                                <Route path="/" element={<Home todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
+                                <Route path="/" element={<Home searchInp={searchInp} todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
                                 <Route path="/addTodo" element={
                                     <AddTodo addTask={addTask} />}
                                 />
