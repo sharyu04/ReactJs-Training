@@ -11,14 +11,12 @@ const TodoList = ({ todoList, handleCheck, type, removeTask }: IProps) => {
                 <h1 className="text-xl font-bold">{type}</h1>
             </div>
             {todoList.map((todoTask, idx) => {
-                if (type === todoListType.completed) {
-                     return todoTask.iscompleted ?
-                         <Todo task={todoTask.task} iscompleted={todoTask.iscompleted} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask} /> : <></>
-                }
-                else if (!todoTask.iscompleted) {
-                    return <Todo task={todoTask.task} iscompleted={todoTask.iscompleted} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask} />
-                }
-                return null
+                return type === todoListType.completed ? (
+                    todoTask.iscompleted ?
+                        <Todo task={todoTask.task} iscompleted={todoTask.iscompleted} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask} /> : <></>
+                )
+                    :
+                   ( !todoTask.iscompleted ?  < Todo task={todoTask.task} iscompleted={todoTask.iscompleted} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask} /> : <></> )
             })}
         </div>
     )
