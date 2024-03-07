@@ -6,14 +6,13 @@ import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import TodoRoute from "./components/TodoRoute";
 import useFetch from "./components/useFetch";
-import { todoListType } from "./constants/task";
 
 export type todoType = {
   task: string;
   iscompleted: boolean;
 };
 function App() {
-  const [todoList, setTodoArr] = useState<todoType[]>([]);
+  const [todoList, setTodoList] = useState<todoType[]>([]);
   const {
     data,
     loading,
@@ -27,16 +26,16 @@ function App() {
       console.log(error);
     } else {
       console.log("Data: ", data);
-      setTodoArr(data);
+      setTodoList(data);
     }
   }, [data, error]);
   const handleCheck = (id: number) => {
     const updateArray = [...todoList];
     updateArray[id].iscompleted = !updateArray[id].iscompleted;
-    setTodoArr(updateArray);
+    setTodoList(updateArray);
   };
   const removeTask = (idx: number) => {
-    setTodoArr([
+    setTodoList([
       ...todoList.slice(0, idx),
       ...todoList.slice(idx + 1, todoList.length),
     ]);
@@ -44,7 +43,7 @@ function App() {
 
 
   const addTask = (taskName: string) => {
-    setTodoArr([...todoList, { task: taskName, iscompleted: false }]);
+    setTodoList([...todoList, { task: taskName, iscompleted: false }]);
   };
 
   return (
