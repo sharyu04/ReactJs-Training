@@ -45,7 +45,7 @@ function App() {
           id: Math.floor(Math.random() * 100),
           task: taskName,
           dueDate: dueDate,
-          completed: false
+          iscompleted: false
       }
       const response = axios.post<unknown>("http://localhost:8000/todo", taskData)
       response.then(response => {

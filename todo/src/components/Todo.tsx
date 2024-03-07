@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 
 interface IProps {task: string, dueDate: string, iscompleted: boolean, handleCheck: (id: number) => void, idx: number, removeTask: (id: number) => void}
 const Todo = ({task, dueDate, iscompleted, handleCheck, idx, removeTask}: IProps) => {
+    console.log(task ,": ",iscompleted)
     return (
         <div id="todoDiv" className="flex w-2/5 text-lg justify-between m-auto">
             <input type="checkbox" name="completed" id="completed" className="w-8 h-8 border-2 border-blue-500 rounded-sm m-1" checked = {iscompleted} onChange={()=>{handleCheck(idx)}}/>

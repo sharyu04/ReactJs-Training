@@ -11,6 +11,7 @@ const TodoList = ({ todoList, handleCheck, type, removeTask }: IProps) => {
                 <h1 className="text-xl font-bold">{type}</h1>
             </div>
             {todoList.map((todoTask, idx) => {
+                console.log(todoTask)
                 return type === todoListType.completed ? (
                     todoTask.iscompleted ?
                         <Todo task={todoTask.task} dueDate={todoTask.dueDate} iscompleted={todoTask.iscompleted} handleCheck={handleCheck} idx={idx} key={idx} removeTask={removeTask} /> : <></>
