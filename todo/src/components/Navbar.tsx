@@ -23,10 +23,10 @@ function Navbar({sortByDate, sortByTask, searchInp, onSearchChange }: { sortByDa
             </svg></button>
             <div id="dropdownNavbar" className={`z-10 ${!dropdown ? "hidden" : ""} font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44`}>
                 <ul className="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
-                    <li onClick={sortByDate}>
+                    <li onClick={sortByDate} style={{cursor:"pointer"}} >
                         <p className="block px-4 py-2 hover:bg-gray-100" >Date</p>
                     </li>
-                    <li onClick={sortByTask}>
+                    <li onClick={sortByTask} style={{cursor:"pointer"}} >
                         <p className="block px-4 py-2 hover:bg-gray-100" >Task Name</p>
                     </li>
                 </ul>

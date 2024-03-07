@@ -82,20 +82,20 @@ function App() {
     }
     const sortByDate = () =>{
         console.log("In sorting data ")
-        const sortedData = todoArr.sort((a:todoType,b: todoType) => {
+        const sortedData = [...todoArr].sort((a:todoType,b: todoType) => {
             if(new Date(a.dueDate) > new Date(b.dueDate)) return 1;
             if(new Date(a.dueDate) < new Date(b.dueDate)) return -1;
             return 0;
         });
         setTodoArr(sortedData)
-        console.log(todoArr)
     }
     const sortByTask = () =>{
-        todoArr.sort((a:todoType,b: todoType) => {
+        const sortedData = [...todoArr].sort((a:todoType,b: todoType) => {
             if(a.task > b.task) return 1;
             if(a.task < b.task) return -1;
             return 0;
         });
+       setTodoArr(sortedData)
     }
     return (
         <div>
