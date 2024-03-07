@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom"
 
-const Todo = ({task, completed, handleCheck, idx, removeTask}: {task: string, completed: boolean, handleCheck: (id: number) => void, idx: number, removeTask: (id: number) => void}) => {
+interface IProps {task: string, iscompleted: boolean, handleCheck: (id: number) => void, idx: number, removeTask: (id: number) => void}
+const Todo = ({task, iscompleted, handleCheck, idx, removeTask}: IProps) => {
     return (
         <div id="todoDiv" className="flex w-2/5 text-lg justify-between m-auto">
-            <input type="checkbox" name="completed" id="completed" className="w-8 h-8 border-2 border-blue-500 rounded-sm m-1" checked = {completed} onChange={()=>{handleCheck(idx)}}/>
+            <input type="checkbox" name="completed" id="completed" className="w-8 h-8 border-2 border-blue-500 rounded-sm m-1" checked = {iscompleted} onChange={()=>{handleCheck(idx)}}/>
             <div id="task" className="w-full m-1">
                 <Link to={`/todos/${idx}`} id="task">{task}</Link>
             </div>

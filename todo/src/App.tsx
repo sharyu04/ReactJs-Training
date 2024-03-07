@@ -6,65 +6,70 @@ import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import TodoRoute from "./components/TodoRoute";
 import useFetch from "./components/useFetch";
+import { todoListType } from "./constants/task";
 
 export type todoType = {
-    task: string;
-    completed: boolean;
+  task: string;
+  iscompleted: boolean;
 };
-
 function App() {
-    const [todoArr, setTodoArr] = useState<todoType[]>([]);
-    const {
-        data,
-        loading,
-        error,
-    }: { data: todoType[]; loading: Boolean; error: Error | null } = useFetch(
-        "http://localhost:8000/todo"
-    );
-    useEffect(() => {
-        if (error !== null) {
-            alert(error)
-        } else {
-            setTodoArr(data);
-        }
-    }, [data, error]);
-    const handleCheck = (id: number) => {
-        const updateArray = [...todoArr];
-        updateArray[id].completed = !updateArray[id].completed;
-        setTodoArr(updateArray);
-    };
-    const removeTask = (idx: number) => {
-        setTodoArr([
-            ...todoArr.slice(0, idx),
-            ...todoArr.slice(idx + 1, todoArr.length),
-        ]);
-    };
-    const addTask = (taskName: string) => {
-        setTodoArr([...todoArr, { task: taskName, completed: false }]);
-    };
-    return (
-        <div>
-            {(() => {
-                if (loading) {
-                    return <h1 className="w-2/5 m-auto">Loading...</h1>;
-                } else {
-                    return (
-                        <BrowserRouter>
-                            <Navbar />
-                            <Routes>
-                                <Route path="/" element={<Home todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
-                                <Route path="/addTodo" element={
-                                    <AddTodo todoArr={todoArr} addTask={addTask} />}
-                                />
-                                <Route path="/todos/:id" element={<TodoRoute todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask}/>} />
-                            </Routes>
-                        </BrowserRouter>
-                    );
-                }
-            })()}
+  const [todoList, setTodoArr] = useState<todoType[]>([]);
+  const {
+    data,
+    loading,
+    error,
+  }: { data: todoType[]; loading: Boolean; error: Error | null } = useFetch(
+    "http://localhost:8000/todo"
+  );
+  useEffect(() => {
+    if (error !== null) {
+      alert(error)
+      console.log(error);
+    } else {
+      console.log("Data: ", data);
+      setTodoArr(data);
+    }
+  }, [data, error]);
+  const handleCheck = (id: number) => {
+    const updateArray = [...todoList];
+    updateArray[id].iscompleted = !updateArray[id].iscompleted;
+    setTodoArr(updateArray);
+  };
+  const removeTask = (idx: number) => {
+    setTodoArr([
+      ...todoList.slice(0, idx),
+      ...todoList.slice(idx + 1, todoList.length),
+    ]);
+  };
 
-        </div>
-    );
+
+  const addTask = (taskName: string) => {
+    setTodoArr([...todoList, { task: taskName, iscompleted: false }]);
+  };
+
+  return (
+    <div>
+      {(() => {
+        if (loading) {
+          return <h1 className="w-2/5 m-auto">Loading...</h1>;
+        } else {
+          return (
+            <BrowserRouter>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
+                <Route path="/addTodo" element={
+                  <AddTodo todoList={todoList} addTask={addTask} />}
+                />
+                <Route path="/todos/:id" element={<TodoRoute todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
+              </Routes>
+            </BrowserRouter>
+          );
+        }
+      })()}
+
+    </div>
+  );
 }
 
 export default App;

@@ -1,18 +1,19 @@
 import { useState } from "react"
 import { todoType } from "../App"
 
-const AddTodo = ({todoArr,addTask}:{todoArr: todoType[],addTask: (taskName: string) => void}) => {
-    const[str,setStr] = useState<string>('')
+interface IProps { todoList: todoType[], addTask: (taskName: string) => void }
+const AddTodo = ({ todoList, addTask }: IProps) => {
+    const [str, setStr] = useState<string>('')
     const[success,setSuccess] = useState<Boolean>(false)
     const btnClickHandler = () => {
-        if(str!==""){
+        if (str !== "") {
             addTask(str)
             setStr('')
             setSuccess(true)
             setTimeout(()=>{setSuccess(false)},1000)
         }
     }
-    const handleChange = (e: any)=> {
+    const handleChange = (e: any) => {
         setStr(e.target.value);
     }
     return(
