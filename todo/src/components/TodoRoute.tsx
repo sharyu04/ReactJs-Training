@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom"
 import { todoType } from "../App"
 import Todo from "./Todo";
-function TodoRoute({ todoList, handleCheck, removeTask }: { todoList: todoType[], handleCheck: (id: number) => void, removeTask: (id: number) => void }) {
+
+interface IProps{ todoList: todoType[], handleCheck: (id: number) => void, removeTask: (id: number) => void }
+function TodoRoute({ todoList, handleCheck, removeTask }:IProps ) {
     const params = useParams();
     const id = Number(params.id)
     return (
