@@ -80,6 +80,23 @@ function App() {
         e.preventDefault()
         setSearchInp(e.target.value)
     }
+    const sortByDate = () =>{
+        console.log("In sorting data ")
+        const sortedData = todoArr.sort((a:todoType,b: todoType) => {
+            if(new Date(a.dueDate) > new Date(b.dueDate)) return 1;
+            if(new Date(a.dueDate) < new Date(b.dueDate)) return -1;
+            return 0;
+        });
+        setTodoArr(sortedData)
+        console.log(todoArr)
+    }
+    const sortByTask = () =>{
+        todoArr.sort((a:todoType,b: todoType) => {
+            if(a.task > b.task) return 1;
+            if(a.task < b.task) return -1;
+            return 0;
+        });
+    }
     return (
         <div>
             {(() => {
@@ -88,7 +105,7 @@ function App() {
                 } else {
                     return (
                         <BrowserRouter>
-                            <Navbar searchInp={searchInp} onSearchChange={onSearchChange}/>
+                            <Navbar sortByDate={sortByDate} sortByTask={sortByTask} searchInp={searchInp} onSearchChange={onSearchChange}/>
                             <Routes>
                                 <Route path="/" element={<Home searchInp={searchInp} todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
                                 <Route path="/addTodo" element={
