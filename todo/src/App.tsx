@@ -11,7 +11,7 @@ export type todoType = {
 };
 
 function App() {
-  const [todoList, setTodoArr] = useState<todoType[]>([]);
+  const [todoList, setTodoList] = useState<todoType[]>([]);
   const {
     data,
     loading,
@@ -25,22 +25,22 @@ function App() {
       console.log(error);
     } else {
       console.log("Data: ", data);
-      setTodoArr(data);
+      setTodoList(data);
     }
   }, [data, error]);
   const handleCheck = (id: number) => {
     const updateArray = [...todoList];
     updateArray[id].iscompleted = !updateArray[id].iscompleted;
-    setTodoArr(updateArray);
+    setTodoList(updateArray);
   };
   const removeTask = (idx: number) => {
-    setTodoArr([
+    setTodoList([
       ...todoList.slice(0, idx),
       ...todoList.slice(idx + 1, todoList.length),
     ]);
   };
   const addTask = (taskName: string) => {
-    setTodoArr([...todoList, { task: taskName, iscompleted: false }]);
+    setTodoList([...todoList, { task: taskName, iscompleted: false }]);
   };
   return (
     <div>
