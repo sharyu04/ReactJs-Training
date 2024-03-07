@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { todoType } from "../App"
 import Todo from "./Todo";
-function TodoRoute({ handleCheck, removeTask }: { handleCheck: (id: number, task: string, dueDate: string, status: Boolean) => void, removeTask: (id: number) => void }) {
+
+interface IProps{ handleCheck: (id: number, task: string, dueDate: string, status: Boolean) => void, removeTask: (id: number) => void }
+function TodoRoute({ handleCheck, removeTask }: IProps) {
     const [todoObj, setTodoObj] = useState<todoType>({
         id: 0,
         task: "",
         dueDate: "",
-        completed: false
+        iscompleted: false
     })
     const params = useParams();
     const id = Number(params.id)

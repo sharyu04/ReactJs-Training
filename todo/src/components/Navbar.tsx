@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Navbar({sortByDate, sortByTask, searchInp, onSearchChange }: { sortByDate: ()=>void, sortByTask: ()=>void, searchInp: string, onSearchChange: (e: any) => void }) {
+interface IProps{ sortByDate: ()=>void, sortByTask: ()=>void, searchInp: string, onSearchChange: (e: any) => void }
+function Navbar({sortByDate, sortByTask, searchInp, onSearchChange }: IProps) {
     const [dropdown,setDropdown] = useState<Boolean>(false)
     return (
 

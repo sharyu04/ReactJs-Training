@@ -12,12 +12,10 @@ export type todoType = {
     id: number;
     task: string;
     dueDate: string;
-    completed: boolean;
+    iscompleted: boolean;
 };
-
 function App() {
-    const [todoArr, setTodoArr] = useState<todoType[]>([]);
-    
+    const [todoList, setTodoList] = useState<todoType[]>([]);
     const {
         data,
         loading,
@@ -30,7 +28,7 @@ function App() {
         if (error !== null) {
             alert(error)
         } else {
-            setTodoArr(data);
+          setTodoList(data);
         }
     }, [data, error]);
     const handleCheck = async (id: number, task: string, dueDate: string, status: Boolean) => {
@@ -38,40 +36,39 @@ function App() {
             id: id,
             task: task,
             dueDate: dueDate,
-            completed: status 
+            iscompleted: status 
         }
         await axios.put<unknown>(`http://localhost:8000/todo/${id}`, newData).then(res => {
-            console.log(res)
             let newArr: todoType[] = []
-            todoArr.forEach(todo => {
+            todoList.forEach(todo => {
                     if(todo.id === id){
-                            todo.completed = !todo.completed
+                            todo.iscompleted = !todo.iscompleted
                         }
                         newArr.push(todo)
                 })
-            setTodoArr(newArr)
+                setTodoList(newArr)
         }).catch(err => { alert(err) })
     };
     const removeTask = async (id: number) => {
         await axios.delete(`http://localhost:8000/todo/${id}`).then(res => {
             console.log(res)
-            let filteredTasks = todoArr.filter((todoTask)=>{
+            let filteredTasks = todoList.filter((todoTask)=>{
     return todoTask.id !== id
                 })
-            setTodoArr(filteredTasks);
+                setTodoList(filteredTasks);
         }).catch(err => alert(err))
     };
     const addTask = (taskName: string, dueDate: string) => {
         const taskData = {
-            id: todoArr[todoArr.length-1].id + 1,
+            id: todoList[todoList.length-1].id + 1,
             task: taskName,
             dueDate: dueDate,
-            completed: false
+            iscompleted: false
         }
         const response = axios.post<unknown>("http://localhost:8000/todo", taskData)
         response.then(response => {
             console.log(response)
-            setTodoArr([...todoArr, {id: todoArr[todoArr.length-1].id+1, task: taskName, dueDate: dueDate, completed: false }]);
+            setTodoList([...todoList, {id: todoList[todoList.length-1].id+1, task: taskName, dueDate: dueDate, iscompleted: false }]);
         }).catch(err => {
             alert(err)
         })
@@ -82,20 +79,20 @@ function App() {
     }
     const sortByDate = () =>{
         console.log("In sorting data ")
-        const sortedData = [...todoArr].sort((a:todoType,b: todoType) => {
+        const sortedData = [...todoList].sort((a:todoType,b: todoType) => {
             if(new Date(a.dueDate) > new Date(b.dueDate)) return 1;
             if(new Date(a.dueDate) < new Date(b.dueDate)) return -1;
             return 0;
         });
-        setTodoArr(sortedData)
+        setTodoList(sortedData)
     }
     const sortByTask = () =>{
-        const sortedData = [...todoArr].sort((a:todoType,b: todoType) => {
+        const sortedData = [...todoList].sort((a:todoType,b: todoType) => {
             if(a.task > b.task) return 1;
             if(a.task < b.task) return -1;
             return 0;
         });
-       setTodoArr(sortedData)
+       setTodoList(sortedData)
     }
     return (
         <div>
@@ -107,7 +104,7 @@ function App() {
                         <BrowserRouter>
                             <Navbar sortByDate={sortByDate} sortByTask={sortByTask} searchInp={searchInp} onSearchChange={onSearchChange}/>
                             <Routes>
-                                <Route path="/" element={<Home searchInp={searchInp} todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
+                                <Route path="/" element={<Home searchInp={searchInp} todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
                                 <Route path="/addTodo" element={
                                     <AddTodo addTask={addTask} />}
                                 />
@@ -118,8 +115,8 @@ function App() {
                 }
             })()}
 
-        </div>
-    );
+    </div>
+  );
 }
 
 export default App;
