@@ -3,14 +3,15 @@ import "./App.css";
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
 import useFetch from "./components/useFetch";
+import { todoListType } from "./constants/task";
 
 export type todoType = {
   task: string;
-  completed: boolean;
+  iscompleted: boolean;
 };
 
 function App() {
-  const [todoArr, setTodoArr] = useState<todoType[]>([]);
+  const [todoList, setTodoArr] = useState<todoType[]>([]);
   const {
     data,
     loading,
@@ -28,22 +29,22 @@ function App() {
     }
   }, [data, error]);
   const handleCheck = (id: number) => {
-    const updateArray = [...todoArr];
-    updateArray[id].completed = !updateArray[id].completed;
+    const updateArray = [...todoList];
+    updateArray[id].iscompleted = !updateArray[id].iscompleted;
     setTodoArr(updateArray);
   };
   const removeTask = (idx: number) => {
     setTodoArr([
-      ...todoArr.slice(0, idx),
-      ...todoArr.slice(idx + 1, todoArr.length),
+      ...todoList.slice(0, idx),
+      ...todoList.slice(idx + 1, todoList.length),
     ]);
   };
   const addTask = (taskName: string) => {
-    setTodoArr([...todoArr, { task: taskName, completed: false }]);
+    setTodoArr([...todoList, { task: taskName, iscompleted: false }]);
   };
   return (
     <div>
-      <AddTodo todoArr={todoArr} addTask={addTask} />
+      <AddTodo todoList={todoList} addTask={addTask} />
       {(() => {
         if (loading) {
           return <h1 className="w-2/5 m-auto">Loading...</h1>;
@@ -51,15 +52,15 @@ function App() {
           return (
             <>
               <TodoList
-                todoArr={todoArr}
+                todoList={todoList}
                 handleCheck={handleCheck}
-                type={"Scheduled"}
+                type={todoListType.scheduled}
                 removeTask={removeTask}
               />
               <TodoList
-                todoArr={todoArr}
+                todoList={todoList}
                 handleCheck={handleCheck}
-                type={"Completed"}
+                type={todoListType.completed}
                 removeTask={removeTask}
               />
             </>
