@@ -11,12 +11,11 @@ import useFetch from "./components/useFetch";
 export type todoType = {
     task: string;
     dueDate: string;
-    completed: boolean;
+    iscompleted: boolean;
 };
-
 function App() {
-    const [todoArr, setTodoArr] = useState<todoType[]>([]);
-   const {
+    const [todoList, setTodoList] = useState<todoType[]>([]);
+    const {
         data,
         loading,
         error,
@@ -27,58 +26,58 @@ function App() {
         if (error !== null) {
             alert(error)
         } else {
-            setTodoArr(data);
+          setTodoList(data);
         }
     }, [data, error]);
     const handleCheck = (id: number) => {
-        const updateArray = [...todoArr];
-        updateArray[id].completed = !updateArray[id].completed;
-        setTodoArr(updateArray);
+      const updateArray = [...todoList];
+      updateArray[id].iscompleted = !updateArray[id].iscompleted;
+      setTodoList(updateArray);
     };
     const removeTask = (idx: number) => {
-        setTodoArr([
-            ...todoArr.slice(0, idx),
-            ...todoArr.slice(idx + 1, todoArr.length),
-        ]);
+      setTodoList([
+        ...todoList.slice(0, idx),
+        ...todoList.slice(idx + 1, todoList.length),
+      ]);
     };
     const addTask =  (taskName: string, dueDate: string) => {
-        const taskData = {
-            id: Math.floor(Math.random() * 100),
-            task: taskName,
-            dueDate: dueDate,
-            completed: false
+      const taskData = {
+          id: Math.floor(Math.random() * 100),
+          task: taskName,
+          dueDate: dueDate,
+          completed: false
+      }
+      const response = axios.post<unknown>("http://localhost:8000/todo", taskData)
+      response.then(response => {
+          console.log(response)
+          setTodoList([...todoList, { task: taskName, dueDate: dueDate, iscompleted: false }]);
+      }).catch(err => {
+              alert(err)
+          })
+  };
+  return (
+    <div>
+      {(() => {
+        if (loading) {
+          return <h1 className="w-2/5 m-auto">Loading...</h1>;
+        } else {
+          return (
+            <BrowserRouter>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
+                <Route path="/addTodo" element={
+                  <AddTodo todoList={todoList} addTask={addTask} />}
+                />
+                <Route path="/todos/:id" element={<TodoRoute todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
+              </Routes>
+            </BrowserRouter>
+          );
         }
-        const response = axios.post<unknown>("http://localhost:8000/todo", taskData)
-        response.then(response => {
-            console.log(response)
-            setTodoArr([...todoArr, { task: taskName, dueDate: dueDate, completed: false }]);
-        }).catch(err => {
-                alert(err)
-            })
-    };
-    return (
-        <div>
-            {(() => {
-                if (loading) {
-                    return <h1 className="w-2/5 m-auto">Loading...</h1>;
-                } else {
-                    return (
-                        <BrowserRouter>
-                            <Navbar />
-                            <Routes>
-                                <Route path="/" element={<Home todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
-                                <Route path="/addTodo" element={
-                                    <AddTodo addTask={addTask} />}
-                                />
-                                <Route path="/todos/:id" element={<TodoRoute todoArr={todoArr} handleCheck={handleCheck} removeTask={removeTask} />} />
-                            </Routes>
-                        </BrowserRouter>
-                    );
-                }
-            })()}
+      })()}
 
-        </div>
-    );
+    </div>
+  );
 }
 
 export default App;

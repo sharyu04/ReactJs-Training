@@ -1,20 +1,21 @@
 import { todoType } from "../App";
+import { todoListType } from "../constants/task";
 import TodoList from "./TodoList";
 
-function Home({todoArr, handleCheck, removeTask}:{todoArr: todoType[], handleCheck:(id: number)=>void, removeTask: (id: number)=>void}) {
+function Home({todoList, handleCheck, removeTask}:{todoList: todoType[], handleCheck:(id: number)=>void, removeTask: (id: number)=>void}) {
 
           return (
             <>
               <TodoList
-                todoArr={todoArr}
+                todoList={todoList}
                 handleCheck={handleCheck}
-                type={"Scheduled"}
+                type={todoListType.scheduled}
                 removeTask={removeTask}
               />
               <TodoList
-                todoArr={todoArr}
+                todoList={todoList}
                 handleCheck={handleCheck}
-                type={"Completed"}
+                type={todoListType.completed}
                 removeTask={removeTask}
               />
             </>
