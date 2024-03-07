@@ -1,11 +1,25 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { todoType } from "../App"
 import Todo from "./Todo";
-function TodoRoute({todoArr, handleCheck, removeTask}:{todoArr:todoType[], handleCheck:(id:number)=>void, removeTask:(id: number)=>void }){
- const params = useParams();
- const id = Number(params.id) 
- return(
-    <Todo task={todoArr[id].task} dueDate={todoArr[id].dueDate} completed={todoArr[id].completed} handleCheck={handleCheck} idx={id} removeTask={removeTask}/>
- )
-    }
-    export default TodoRoute
+function TodoRoute({ handleCheck, removeTask }: { handleCheck: (id: number, task: string, dueDate: string, status: Boolean) => void, removeTask: (id: number) => void }) {
+    const [todoObj, setTodoObj] = useState<todoType>({
+        id: 0,
+        task: "",
+        dueDate: "",
+        completed: false
+    })
+    const params = useParams();
+    const id = Number(params.id)
+    useEffect(() => {
+        axios.get(`http://localhost:8000/todo/${id}`).then(res => {
+            console.log(res.data)
+            setTodoObj(res.data)
+        }).catch(err => alert(err))
+    },[])
+    return (
+        <Todo todoObj={todoObj} handleCheck={handleCheck} key={todoObj?.id} removeTask={removeTask} />
+    )
+}
+export default TodoRoute
