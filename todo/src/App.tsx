@@ -2,49 +2,51 @@ import { useState } from 'react';
 import './App.css';
 import AddTodo from './components/AddTodo';
 import TodoList from './components/TodoList';
+import { todoListType } from './constants/task';
 
 export type todoType = {
-        task: string;
-        completed : boolean
-    }
-    
-function App() {
-    const [todoArr, setTodoArr] = useState<todoType[]>([
-        {
-            task: "Task1",
-            completed: false
-        },
-        {
-            task: "Task2",
-            completed: false
-        },
-        {
-            task: "Task3",
-            completed: true
-        }
-        ])
+    task: string;
+    iscompleted: boolean
+}
 
- const handleCheck = (id: number) => {
-         const updateArray = [...todoArr]
-         updateArray[id].completed = !updateArray[id].completed
-         setTodoArr(updateArray)
-     }
- const removeTask = (idx:number)=>{
-    setTodoArr([
-        ...todoArr.slice(0,idx),
-        ...todoArr.slice(idx+1,todoArr.length)
-    ]);
- }
- const addTask = (taskName:string) => {
-    setTodoArr([...todoArr,{task: taskName, completed: false}])
- }
-return (
-    <div>
-        <AddTodo todoArr = {todoArr} addTask = {addTask}/>
-        <TodoList todoArr = {todoArr} handleCheck = {handleCheck} type = {"Scheduled"} removeTask = {removeTask}/>
-        <TodoList todoArr = {todoArr} handleCheck = {handleCheck} type = {"Completed"} removeTask = {removeTask}/>
-    </div>
-);
+const initialState: todoType[] = [
+    {
+        task: "Task1",
+        iscompleted: false
+    },
+    {
+        task: "Task2",
+        iscompleted: false
+    },
+    {
+        task: "Task3",
+        iscompleted: true
+    }
+]
+function App() {
+    const [todoList, setTodoList] = useState<todoType[]>(initialState)
+
+    const handleCheck = (id: number) => {
+        const updateArray = [...todoList]
+        updateArray[id].iscompleted = !updateArray[id].iscompleted
+        setTodoList(updateArray)
+    }
+    const removeTask = (idx: number) => {
+        setTodoList([
+            ...todoList.slice(0, idx),
+            ...todoList.slice(idx + 1, todoList.length)
+        ]);
+    }
+    const addTask = (taskName: string) => {
+        setTodoList([...todoList, { task: taskName, iscompleted: false }])
+    }
+    return (
+        <div>
+            <AddTodo todoList={todoList} addTask={addTask} />
+            <TodoList todoList={todoList} handleCheck={handleCheck} type={todoListType.completed} removeTask={removeTask} />
+            <TodoList todoList={todoList} handleCheck={handleCheck} type={todoListType.scheduled} removeTask={removeTask} />
+        </div>
+    );
 }
 
 export default App
