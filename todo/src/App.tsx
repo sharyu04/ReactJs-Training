@@ -7,6 +7,8 @@ import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import TodoRoute from "./components/TodoRoute";
 import useFetch from "./components/useFetch";
+import { url } from "./constants/task";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type todoType = {
     id: number;
@@ -15,20 +17,22 @@ export type todoType = {
     iscompleted: boolean;
 };
 function App() {
+    const queryClient = useQueryClient()
     const [todoList, setTodoList] = useState<todoType[]>([]);
     const {
         data,
-        loading,
+        isFetching,
         error,
-    }: { data: todoType[]; loading: Boolean; error: Error | null } = useFetch(
-        "http://localhost:8000/todo"
-    );
+    }: { data: todoType[]; isFetching: Boolean; error: Error | null } = useFetch(url.baseUrl);
     const [searchInp, setSearchInp] = useState<string>("")
     useEffect(() => {
+        console.log("isFetching: ", isFetching)
         if (error !== null) {
+            console.log("error: ", error)
             alert(error)
         } else {
-          setTodoList(data);
+            console.log("data: ", data)
+            setTodoList(data);
         }
     }, [data, error]);
     const handleCheck = async (id: number, task: string, dueDate: string, status: Boolean) => {
@@ -36,73 +40,69 @@ function App() {
             id: id,
             task: task,
             dueDate: dueDate,
-            iscompleted: status 
+            iscompleted: status
         }
-        await axios.put<unknown>(`http://localhost:8000/todo/${id}`, newData).then(res => {
-            let newArr: todoType[] = []
-            todoList.forEach(todo => {
-                    if(todo.id === id){
-                            todo.iscompleted = !todo.iscompleted
-                        }
-                        newArr.push(todo)
-                })
-                setTodoList(newArr)
+        await axios.put<unknown>(`${url.baseUrl}/${id}`, newData).then(res => {
+            queryClient.refetchQueries({
+                queryKey: ["todoList"],
+            })
         }).catch(err => { alert(err) })
     };
     const removeTask = async (id: number) => {
-        await axios.delete(`http://localhost:8000/todo/${id}`).then(res => {
-            console.log(res)
-            let filteredTasks = todoList.filter((todoTask)=>{
-    return todoTask.id !== id
-                })
-                setTodoList(filteredTasks);
+        await axios.delete(`${url.baseUrl}/${id}`).then(res => {
+            queryClient.refetchQueries({
+                queryKey: ["todoList"],
+            })
         }).catch(err => alert(err))
     };
     const addTask = (taskName: string, dueDate: string) => {
         const taskData = {
-            id: todoList[todoList.length-1].id + 1,
+            id: todoList[todoList.length - 1].id + 1,
             task: taskName,
             dueDate: dueDate,
             iscompleted: false
         }
-        const response = axios.post<unknown>("http://localhost:8000/todo", taskData)
+        const response = axios.post<unknown>(url.baseUrl, taskData)
         response.then(response => {
-            console.log(response)
-            setTodoList([...todoList, {id: todoList[todoList.length-1].id+1, task: taskName, dueDate: dueDate, iscompleted: false }]);
+            queryClient.refetchQueries({
+                queryKey: ["todoList"],
+            })
         }).catch(err => {
             alert(err)
         })
     };
-    const onSearchChange = (e: any) => {
+    const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         setSearchInp(e.target.value)
     }
-    const sortByDate = () =>{
-        console.log("In sorting data ")
-        const sortedData = [...todoList].sort((a:todoType,b: todoType) => {
-            if(new Date(a.dueDate) > new Date(b.dueDate)) return 1;
-            if(new Date(a.dueDate) < new Date(b.dueDate)) return -1;
-            return 0;
+    const sortByDate = () => {
+        const sortedData = [...todoList].sort((a: todoType, b: todoType) => {
+            return (new Date(a.dueDate) > new Date(b.dueDate)) ? 1 :
+                ((new Date(a.dueDate) < new Date(b.dueDate)) ? -1 :
+                    0)
         });
         setTodoList(sortedData)
     }
-    const sortByTask = () =>{
-        const sortedData = [...todoList].sort((a:todoType,b: todoType) => {
-            if(a.task > b.task) return 1;
-            if(a.task < b.task) return -1;
-            return 0;
+    const sortByTask = () => {
+        const sortedData = [...todoList].sort((a: todoType, b: todoType) => {
+            return (a.task > b.task) ? 1 :
+                ((a.task < b.task) ? -1 :
+                    0)
         });
-       setTodoList(sortedData)
+        setTodoList(sortedData)
     }
+
+
+
     return (
-        <div>
-            {(() => {
-                if (loading) {
-                    return <h1 className="w-2/5 m-auto">Loading...</h1>;
-                } else {
-                    return (
+        <>
+            {
+                (isFetching) ?
+                    <h1 className="w-2/5 m-auto">Loading...</h1>
+                    :
+                    (
                         <BrowserRouter>
-                            <Navbar sortByDate={sortByDate} sortByTask={sortByTask} searchInp={searchInp} onSearchChange={onSearchChange}/>
+                            <Navbar sortByDate={sortByDate} sortByTask={sortByTask} searchInp={searchInp} onSearchChange={onSearchChange} />
                             <Routes>
                                 <Route path="/" element={<Home searchInp={searchInp} todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
                                 <Route path="/addTodo" element={
@@ -111,12 +111,11 @@ function App() {
                                 <Route path="/todos/:id" element={<TodoRoute handleCheck={handleCheck} removeTask={removeTask} />} />
                             </Routes>
                         </BrowserRouter>
-                    );
-                }
-            })()}
+                    )
+            }
 
-    </div>
-  );
+        </>
+    );
 }
 
 export default App;

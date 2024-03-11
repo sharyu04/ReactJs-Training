@@ -1,26 +1,16 @@
+import { useQuery } from "@tanstack/react-query"
 import { todoType } from "../App"
-import { useCallback, useEffect, useState } from "react"
-import axios from "axios"
 
-function useFetch(url: string) {
-    const [data, setData] = useState<todoType[]>([])
-    const [loading, setLoading] = useState<Boolean>(false)
-    const [error, setError] = useState<Error | null>(null)
+const useFetch = (url: string) => {
 
-    const getDataFunc = useCallback( async() =>{
-        await axios.get(url).then(res => {
-            setLoading(false)
-            setData(res.data)
-        }).catch(err => {
-            setLoading(false)
-            setError(err)
+    const initialData: todoType[] = []
+
+    const {data,isFetching, error } = useQuery({
+            initialData: initialData,
+            queryKey : ["todoList"],
+            queryFn: () => 
+                fetch(url).then(res => res.json()),
         })
-    },[url])
-
-    useEffect( () => {
-        setLoading(true)
-        getDataFunc()
-    }, [getDataFunc])
-    return {data, loading, error}
+    return {data, isFetching, error}
 }
 export default useFetch        

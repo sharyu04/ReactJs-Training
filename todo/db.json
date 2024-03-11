@@ -1,16 +1,10 @@
 {
   "todo": [
     {
-      "id": 1,
-      "task": "Task1",
-      "dueDate": "2024-03-06",
-      "iscompleted": false
-    },
-    {
       "id": 2,
       "task": "Task2",
       "dueDate": "2024-03-06",
-      "iscompleted": false
+      "iscompleted": true
     },
     {
       "id": 3,
@@ -22,7 +16,7 @@
       "id": 34,
       "task": "Task4",
       "dueDate": "2024-03-06",
-      "iscompleted": false
+      "iscompleted": true
     },
     {
       "id": 63,
@@ -46,6 +40,12 @@
       "id": 5,
       "task": "sakjdgkdgf",
       "dueDate": "2024-03-20",
+      "iscompleted": true
+    },
+    {
+      "id": 7,
+      "task": "Testing AddTodo",
+      "dueDate": "2024-03-13",
       "iscompleted": false
     }
   ]
