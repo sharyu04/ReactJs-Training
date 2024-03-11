@@ -68,7 +68,13 @@ function App() {
         setSortBy("Name")
     }
 
+    const nextPage = () => {
+        setPage(page + 1)
+    }
 
+    const prevPage = () => {
+        setPage(page-1)
+    }
 
     return (
         <>
