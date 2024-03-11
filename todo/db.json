@@ -4,13 +4,13 @@
       "id": 2,
       "task": "Task2",
       "dueDate": "2024-03-06",
-      "iscompleted": true
+      "iscompleted": false
     },
     {
       "id": 3,
       "task": "Task3",
       "dueDate": "2024-03-06",
-      "iscompleted": true
+      "iscompleted": false
     },
     {
       "id": 34,
@@ -45,6 +45,18 @@
     {
       "id": 7,
       "task": "Testing AddTodo",
+      "dueDate": "2024-03-13",
+      "iscompleted": false
+    },
+    {
+      "id": 8,
+      "task": "abc",
+      "dueDate": "2024-03-01",
+      "iscompleted": false
+    },
+    {
+      "id": 9,
+      "task": "bcd",
       "dueDate": "2024-03-13",
       "iscompleted": false
     }

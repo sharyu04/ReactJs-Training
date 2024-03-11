@@ -20,18 +20,19 @@ const TodoList = ({ searchInp, todoList, handleCheck, type, removeTask }: IProps
             {todoList.filter(todoTask => {
                 return searchInp.toLowerCase() === "" ? todoTask : todoTask.task.toLowerCase().includes(searchInp.toLowerCase());
             }).map((todoTask, idx) => {
-                return <React.Fragment key={idx}>{
-                    type === todoListType.completed ? (
-                        todoTask.iscompleted ?
-                            <Todo todoObj={todoTask} handleCheck={handleCheck} removeTask={removeTask} /> : <></>
-                    )
-                        :
-                        (!todoTask.iscompleted ? <Todo todoObj={todoTask} handleCheck={handleCheck} removeTask={removeTask} /> : <></>)}
-                </React.Fragment>
+                switch(type){
+                    case todoListType.completed:
+                        return todoTask.iscompleted ? <Todo key={idx} todoObj={todoTask} handleCheck={handleCheck} removeTask={removeTask} /> : <></>
+                    case todoListType.scheduled:
+                        return !todoTask.iscompleted ? <Todo key={idx} todoObj={todoTask} handleCheck={handleCheck} removeTask={removeTask} /> : <></>
+                    default: 
+                        return <Todo key={idx} todoObj={todoTask} handleCheck={handleCheck} removeTask={removeTask} />
+                }
             })}
         </div>
     )
 }
 
 export default TodoList
+
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import AddTodo from "./components/AddTodo";
@@ -18,23 +18,13 @@ export type todoType = {
 };
 function App() {
     const queryClient = useQueryClient()
-    const [todoList, setTodoList] = useState<todoType[]>([]);
+    const [page, setPage] = useState<number>(0)
+    const [sortBy, setSortBy] = useState<string>(url.baseUrl)
     const {
         data,
-        isFetching,
-        error,
-    }: { data: todoType[]; isFetching: Boolean; error: Error | null } = useFetch(url.baseUrl);
-    const [searchInp, setSearchInp] = useState<string>("")
-    useEffect(() => {
-        console.log("isFetching: ", isFetching)
-        if (error !== null) {
-            console.log("error: ", error)
-            alert(error)
-        } else {
-            console.log("data: ", data)
-            setTodoList(data);
-        }
-    }, [data, error]);
+        isFetching
+    }: { data: todoType[]; isFetching: Boolean} = useFetch(sortBy);
+
     const handleCheck = async (id: number, task: string, dueDate: string, status: Boolean) => {
         const newData = {
             id: id,
@@ -57,7 +47,7 @@ function App() {
     };
     const addTask = (taskName: string, dueDate: string) => {
         const taskData = {
-            id: todoList[todoList.length - 1].id + 1,
+            id: data[data.length - 1].id + 1,
             task: taskName,
             dueDate: dueDate,
             iscompleted: false
@@ -71,25 +61,11 @@ function App() {
             alert(err)
         })
     };
-    const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setSearchInp(e.target.value)
-    }
     const sortByDate = () => {
-        const sortedData = [...todoList].sort((a: todoType, b: todoType) => {
-            return (new Date(a.dueDate) > new Date(b.dueDate)) ? 1 :
-                ((new Date(a.dueDate) < new Date(b.dueDate)) ? -1 :
-                    0)
-        });
-        setTodoList(sortedData)
+        setSortBy("Date")
     }
     const sortByTask = () => {
-        const sortedData = [...todoList].sort((a: todoType, b: todoType) => {
-            return (a.task > b.task) ? 1 :
-                ((a.task < b.task) ? -1 :
-                    0)
-        });
-        setTodoList(sortedData)
+        setSortBy("Name")
     }
 
 
@@ -102,9 +78,9 @@ function App() {
                     :
                     (
                         <BrowserRouter>
-                            <Navbar sortByDate={sortByDate} sortByTask={sortByTask} searchInp={searchInp} onSearchChange={onSearchChange} />
+                            <Navbar/>
                             <Routes>
-                                <Route path="/" element={<Home searchInp={searchInp} todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
+                                <Route path="/" element={<Home todoList={data} handleCheck={handleCheck} removeTask={removeTask} sortByDate={sortByDate} sortByTask={sortByTask}/>} />
                                 <Route path="/addTodo" element={
                                     <AddTodo addTask={addTask} />}
                                 />
