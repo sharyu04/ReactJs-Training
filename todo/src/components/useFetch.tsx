@@ -1,26 +1,37 @@
+import { useQuery } from "@tanstack/react-query"
 import { todoType } from "../App"
-import { useCallback, useEffect, useState } from "react"
-import axios from "axios"
+import { todoListType, url } from "../constants/task"
 
-function useFetch(url: string) {
-    const [data, setData] = useState<todoType[]>([])
-    const [loading, setLoading] = useState<Boolean>(false)
-    const [error, setError] = useState<Error | null>(null)
+const useFetch = (sortBy: string, page: number, type: string) => {
 
-    const getDataFunc = useCallback( async() =>{
-        await axios.get(url).then(res => {
-            setLoading(false)
-            setData(res.data)
-        }).catch(err => {
-            setLoading(false)
-            setError(err)
-        })
-    },[url])
+    const initialData: todoType[] = []
 
-    useEffect( () => {
-        setLoading(true)
-        getDataFunc()
-    }, [getDataFunc])
-    return {data, loading, error}
+    const { data, isFetching, error } = useQuery({
+        initialData: initialData,
+        queryKey: ["todoList", sortBy, page, type],
+        queryFn: () => {
+            let urlValue = url.baseUrlWithLimit
+            switch (sortBy) {
+                case "Date":
+                    urlValue = url.sortByDate
+                    break
+                case "Name":
+                    urlValue = url.sortByName
+                    break
+            }
+                    type === todoListType.completed ? urlValue = `${urlValue}&_page=${page}&iscompleted=true` : (type===todoListType.scheduled ? urlValue = `${urlValue}&_page=${page}&iscompleted=false`: urlValue = `${urlValue}&_page=${page}`)
+            return fetch(urlValue).then(res => res.json())
+        },
+    })
+
+    if (error != null) {
+        alert(error)
+    }
+
+    console.log(data)
+    // const lastEleId = data[data.length - 1].id
+    // updateLastIndexId(lastEleId)
+
+    return { data, isFetching }
 }
 export default useFetch        
