@@ -1,7 +1,10 @@
+import { useQueryClient } from "@tanstack/react-query"
+import axios from "axios"
 import { useState } from "react"
+import { url } from "../constants/task"
 
-interface IProps { addTask: (taskName: string, dueDate: string) => void }
-const AddTodo = ({ addTask }: IProps) => {
+const AddTodo = () => {
+    const queryClient = useQueryClient()
     const [task, setTask] = useState<string>('')
     const[success,setSuccess] = useState<Boolean>(false)
     const [dueDate, setDueDate] = useState<string>("")
@@ -19,7 +22,22 @@ const AddTodo = ({ addTask }: IProps) => {
     const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDueDate(e.target.value);
     }
-
+    const addTask = (taskName: string, dueDate: string) => {
+        const taskData = {
+            task: taskName,
+            dueDate: dueDate,
+            iscompleted: false
+        }
+        const response = axios.post<unknown>(url.baseUrl, taskData)
+        response.then(response => {
+            queryClient.refetchQueries({
+                queryKey: ["todoList"],
+            })
+        }).catch(err => {
+            alert(err)
+        })
+    };
+ 
     return (
         <div id="addTodo" className="w-2/5 m-auto">
             <input id="input" type="text" placeholder="Add your todo" name="input" className="p-px text-lg" value={task} onChange={handleChangeTask} />
