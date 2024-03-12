@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import AddTodo from "./components/AddTodo";
-import TodoList from "./components/TodoList";
+import Home from "./components/Home";
+import Navbar from "./components/Navbar";
+import TodoRoute from "./components/TodoRoute";
 import useFetch from "./components/useFetch";
-import { todoListType } from "./constants/task";
 
 export type todoType = {
   task: string;
   iscompleted: boolean;
 };
-
 function App() {
   const [todoList, setTodoList] = useState<todoType[]>([]);
   const {
@@ -21,7 +22,7 @@ function App() {
   );
   useEffect(() => {
     if (error !== null) {
-        alert(error)
+      alert(error)
       console.log(error);
     } else {
       console.log("Data: ", data);
@@ -39,34 +40,33 @@ function App() {
       ...todoList.slice(idx + 1, todoList.length),
     ]);
   };
+
+
   const addTask = (taskName: string) => {
     setTodoList([...todoList, { task: taskName, iscompleted: false }]);
   };
+
   return (
     <div>
-      <AddTodo todoList={todoList} addTask={addTask} />
       {(() => {
         if (loading) {
           return <h1 className="w-2/5 m-auto">Loading...</h1>;
         } else {
           return (
-            <>
-              <TodoList
-                todoList={todoList}
-                handleCheck={handleCheck}
-                type={todoListType.scheduled}
-                removeTask={removeTask}
-              />
-              <TodoList
-                todoList={todoList}
-                handleCheck={handleCheck}
-                type={todoListType.completed}
-                removeTask={removeTask}
-              />
-            </>
+            <BrowserRouter>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
+                <Route path="/addTodo" element={
+                  <AddTodo todoList={todoList} addTask={addTask} />}
+                />
+                <Route path="/todos/:id" element={<TodoRoute todoList={todoList} handleCheck={handleCheck} removeTask={removeTask} />} />
+              </Routes>
+            </BrowserRouter>
           );
         }
       })()}
+
     </div>
   );
 }

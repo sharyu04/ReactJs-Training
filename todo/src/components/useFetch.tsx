@@ -1,5 +1,5 @@
 import { todoType } from "../App"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 
 function useFetch(url: string) {
@@ -7,21 +7,20 @@ function useFetch(url: string) {
     const [loading, setLoading] = useState<Boolean>(false)
     const [error, setError] = useState<Error | null>(null)
 
-    const getDataFunc = async() =>{
+    const getDataFunc = useCallback( async() =>{
         await axios.get(url).then(res => {
             setLoading(false)
-            console.log(res)
             setData(res.data)
         }).catch(err => {
             setLoading(false)
             setError(err)
         })
-    }
+    },[url])
 
     useEffect( () => {
         setLoading(true)
         getDataFunc()
-    }, [url])
+    }, [getDataFunc])
     return {data, loading, error}
 }
 export default useFetch        
