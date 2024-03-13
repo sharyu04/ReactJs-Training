@@ -1,7 +1,9 @@
-function Counter() {
-    return (
+import { useAppSelector } from "../redux/hooks";
 
-        <h1>0</h1>
+function Counter() {
+    const count = useAppSelector(state => state)
+    return (
+        <h1 >{count}</h1>
     );
 }
 export default Counter

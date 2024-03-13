@@ -1,4 +1,5 @@
 import './App.css'
+import Buttons from './components/Buttons'
 import Counter from './components/Conunter'
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
     return (
         <>
             <Counter />
+            <Buttons />
         </>
     )
 }

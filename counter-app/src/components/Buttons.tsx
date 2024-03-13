@@ -1,11 +1,12 @@
-import { useDispatch } from "react-redux"
+import { decrement, increment } from "../redux/store"
+import { useAppDispatch } from "../redux/hooks"
 
 function Buttons() {
-const dispatch = useDispatch()
+const dispatch = useAppDispatch()
     return (
         <>
-            <button>Increment</button>
-            <button>Decrement</button>
+            <button onClick={() =>dispatch(increment())}>Increment</button>
+            <button onClick={() =>dispatch(decrement())}>Decrement</button>
         </>
     )
 }
