@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -8,44 +9,52 @@ import TodoRoute from "./components/TodoRoute";
 import useFetch from "./components/useFetch";
 
 export type todoType = {
-  task: string;
-  iscompleted: boolean;
+    task: string;
+    dueDate: string;
+    iscompleted: boolean;
 };
 function App() {
-  const [todoList, setTodoList] = useState<todoType[]>([]);
-  const {
-    data,
-    loading,
-    error,
-  }: { data: todoType[]; loading: Boolean; error: Error | null } = useFetch(
-    "http://localhost:8000/todo"
-  );
-  useEffect(() => {
-    if (error !== null) {
-      alert(error)
-      console.log(error);
-    } else {
-      console.log("Data: ", data);
-      setTodoList(data);
-    }
-  }, [data, error]);
-  const handleCheck = (id: number) => {
-    const updateArray = [...todoList];
-    updateArray[id].iscompleted = !updateArray[id].iscompleted;
-    setTodoList(updateArray);
+    const [todoList, setTodoList] = useState<todoType[]>([]);
+    const {
+        data,
+        loading,
+        error,
+    }: { data: todoType[]; loading: Boolean; error: Error | null } = useFetch(
+        "http://localhost:8000/todo"
+    );
+    useEffect(() => {
+        if (error !== null) {
+            alert(error)
+        } else {
+          setTodoList(data);
+        }
+    }, [data, error]);
+    const handleCheck = (id: number) => {
+      const updateArray = [...todoList];
+      updateArray[id].iscompleted = !updateArray[id].iscompleted;
+      setTodoList(updateArray);
+    };
+    const removeTask = (idx: number) => {
+      setTodoList([
+        ...todoList.slice(0, idx),
+        ...todoList.slice(idx + 1, todoList.length),
+      ]);
+    };
+    const addTask =  (taskName: string, dueDate: string) => {
+      const taskData = {
+          id: Math.floor(Math.random() * 100),
+          task: taskName,
+          dueDate: dueDate,
+          iscompleted: false
+      }
+      const response = axios.post<unknown>("http://localhost:8000/todo", taskData)
+      response.then(response => {
+          console.log(response)
+          setTodoList([...todoList, { task: taskName, dueDate: dueDate, iscompleted: false }]);
+      }).catch(err => {
+              alert(err)
+          })
   };
-  const removeTask = (idx: number) => {
-    setTodoList([
-      ...todoList.slice(0, idx),
-      ...todoList.slice(idx + 1, todoList.length),
-    ]);
-  };
-
-
-  const addTask = (taskName: string) => {
-    setTodoList([...todoList, { task: taskName, iscompleted: false }]);
-  };
-
   return (
     <div>
       {(() => {

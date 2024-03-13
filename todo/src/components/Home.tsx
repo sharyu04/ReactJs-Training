@@ -2,7 +2,8 @@ import { todoType } from "../App";
 import { todoListType } from "../constants/task";
 import TodoList from "./TodoList";
 
-function Home({todoList, handleCheck, removeTask}:{todoList: todoType[], handleCheck:(id: number)=>void, removeTask: (id: number)=>void}) {
+interface IProps{todoList: todoType[], handleCheck:(id: number)=>void, removeTask: (id: number)=>void}
+function Home({todoList, handleCheck, removeTask}:IProps) {
 
           return (
             <>
