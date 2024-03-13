@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { todoType } from "../App";
 import { todoListType, url } from "../constants/task";
 import TodoList from "./TodoList";
@@ -19,7 +19,20 @@ function Home() {
     const [type, setType] = useState<string>(todoListType.all)
 
     const queryClient = useQueryClient()
-    const [page, setPage] = useState<number>(1)
+    function reducer(page: number, action: string) {
+        if (action === "Increment") {
+            return page < 3 ?
+                page + 1 :
+                page;
+        }
+        else if (action === "Decrement") {
+            return page>1 ? page - 1 : page;
+        }
+        throw Error('Unknown action');
+    }
+    const [page, dispatch] = useReducer(reducer, 1)
+
+
     const [sortBy, setSortBy] = useState<string>(url.baseUrl)
     const {
         data,
@@ -51,14 +64,6 @@ function Home() {
     }
     const sortByTask = () => {
         setSortBy("Name")
-    }
-
-    const nextPage = () => {
-        setPage(page + 1)
-    }
-
-    const prevPage = () => {
-        setPage(page - 1)
     }
 
     return (
@@ -152,7 +157,7 @@ function Home() {
             <nav aria-label="Page navigation example" className="w-2/5 my-6 mx-auto">
                 <ul className="flex items-center -space-x-px h-8 text-sm justify-end">
                     <li>
-                        <button onClick={prevPage} className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                        <button onClick={() => { dispatch("Decrement") }} className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
                             <span className="sr-only">Previous</span>
                             <svg className="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
@@ -163,7 +168,7 @@ function Home() {
                         <button className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{page}</button>
                     </li>
                     <li>
-                        <button onClick={nextPage} className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                        <button onClick={() => { dispatch("Increment") }} className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
                             <span className="sr-only">Next</span>
                             <svg className="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
