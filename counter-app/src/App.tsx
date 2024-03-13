@@ -6,8 +6,6 @@ function App() {
     return (
         <>
             <Counter />
-            <button>Increment</button>
-            <button>Decrement</button>
         </>
     )
 }
