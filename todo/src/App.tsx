@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import AddTodo from "./components/AddTodo";
@@ -12,17 +11,17 @@ export type todoType = {
     iscompleted: boolean;
 };
 function App() {
-   return (
+    return (
         <>
-                        <BrowserRouter>
-                            <Navbar />
-                            <Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/addTodo" element={
-                                    <AddTodo />}
-                                />
-                            </Routes>
-                        </BrowserRouter>
+            <BrowserRouter>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/addTodo" element={
+                        <AddTodo />}
+                    />
+                </Routes>
+            </BrowserRouter>
 
         </>
     );
@@ -31,4 +30,3 @@ function App() {
 export default App;
 
 
- // <Route path="/todos/:id" element={<TodoRoute handleCheck={handleCheck} removeTask={removeTask} />} />
