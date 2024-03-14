@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 import { todoType } from "../App"
 import { todoListType, url } from "../constants/task"
 
@@ -25,12 +26,8 @@ const useFetch = (sortBy: string, page: number, type: string) => {
     })
 
     if (error != null) {
-        alert(error)
+        toast(error.message)
     }
-
-    console.log(data)
-    // const lastEleId = data[data.length - 1].id
-    // updateLastIndexId(lastEleId)
 
     return { data, isFetching }
 }

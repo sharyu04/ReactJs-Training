@@ -1,11 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useReducer, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { todoType } from "../App";
 import { todoListType, url } from "../constants/task";
 import TodoList from "./TodoList";
 import useFetch from "./useFetch";
-
+import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
 
@@ -26,7 +27,7 @@ function Home() {
                 page;
         }
         else if (action === "Decrement") {
-            return page>1 ? page - 1 : page;
+            return page > 1 ? page - 1 : page;
         }
         throw Error('Unknown action');
     }
@@ -50,7 +51,7 @@ function Home() {
             queryClient.refetchQueries({
                 queryKey: ["todoList"],
             })
-        }).catch(err => { alert(err) })
+        }).catch(err => toast(err))
     };
     const removeTask = async (id: number) => {
         await axios.delete(`${url.baseUrl}/${id}`).then(res => {
@@ -177,7 +178,7 @@ function Home() {
                     </li>
                 </ul>
             </nav>
-
+            <ToastContainer />
         </>
     );
 }
